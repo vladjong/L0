@@ -1,17 +1,19 @@
 package server
 
 import (
-	"io"
+	"html/template"
 	"net/http"
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
+	"github.com/vladjong/L0/internal/app/store"
 )
 
 type Server struct {
 	config *Config
 	logger *logrus.Logger
 	router *mux.Router
+	store  *store.Store
 }
 
 func New(config *Config) *Server {
@@ -26,8 +28,12 @@ func (s *Server) Start() error {
 	if err := s.configureLogger(); err != nil {
 		return err
 	}
-	s.logger.Info("starting server")
 	s.configureRouter()
+	if err := s.configureStore(); err != nil {
+		return err
+	}
+
+	s.logger.Info("starting server")
 	return http.ListenAndServe(s.config.BindAddr, s.router)
 }
 
@@ -44,9 +50,18 @@ func (s *Server) configureRouter() {
 	s.router.HandleFunc("/", s.handleHello())
 }
 
+func (s *Server) configureStore() error {
+	st := store.New(s.config.Store)
+	if err := st.Open(); err != nil {
+		return err
+	}
+	s.store = st
+	return nil
+}
+
 func (s *Server) handleHello() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		io.WriteString(w, "Hello")
+		tmpl, _ := template.ParseFiles("templates/html/page.html")
+		tmpl.Execute(w, nil)
 	}
-
 }
