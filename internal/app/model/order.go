@@ -24,16 +24,15 @@ type Order struct {
 }
 
 func (o *Order) Validate() error {
-	return validation.ValidateStruct(o,
-		validation.Field(&o.OrderId, validation.Required, validation.Length(1, 100)),
-		validation.Field(&o.TrackNumber, validation.Required, validation.Length(1, 100)),
-		validation.Field(&o.Entry, validation.Required, validation.Length(1, 100)),
-		validation.Field(&o.Locale, validation.Required, validation.Length(1, 3)),
-		validation.Field(&o.Customer, validation.Required, validation.Length(1, 100)),
-		validation.Field(&o.DeliveryService, validation.Required, validation.Length(1, 100)),
-		validation.Field(&o.Shardkey, validation.Required, validation.Length(1, 100)),
-		validation.Field(&o.SmId, validation.Required),
-		validation.Field(&o.DateOf, validation.Required),
-		validation.Field(&o.OofShard, validation.Required),
-	)
+	return validation.ValidateStruct(o) // validation.Field(&o.OrderId, validation.Required, validation.Length(1, 100)),
+	// validation.Field(&o.TrackNumber, validation.Required, validation.Length(1, 100)),
+	// validation.Field(&o.Entry, validation.Required, validation.Length(1, 100)),
+	// validation.Field(&o.Locale, validation.Required, validation.Length(1, 3)),
+	// validation.Field(&o.Customer, validation.Required, validation.Length(1, 100)),
+	// validation.Field(&o.DeliveryService, validation.Required, validation.Length(1, 100)),
+	// validation.Field(&o.Shardkey, validation.Required, validation.Length(1, 100)),
+	// validation.Field(&o.SmId, validation.Required),
+	// validation.Field(&o.DateOf, validation.Required),
+	// validation.Field(&o.OofShard, validation.Required),
+
 }
