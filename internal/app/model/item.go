@@ -1,10 +1,10 @@
 package model
 
 type Item struct {
-	Rid         string `db:"rid"`
 	ChrtId      int    `db:"chrt_id"`
 	TrackNumber string `db:"track_number"`
 	Price       int    `db:"price"`
+	Rid         string `db:"rid"`
 	Name        string `db:"name"`
 	Sale        int    `db:"sale"`
 	Size        string `db:"size"`

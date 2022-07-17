@@ -1,3 +1,17 @@
+CREATE TABLE deliveries
+(
+    id      serial PRIMARY KEY,
+    name     varchar(255) not null,
+    phone    varchar(255) not null,
+    zip      varchar(255) not null,
+    city     varchar(255) not null,
+    address  varchar(255) not null,
+    region   varchar(255) not null,
+    email    varchar(255) not null
+);
+
+
+
 CREATE TABLE orders
 (
     order_uid           varchar(255) PRIMARY KEY,
@@ -12,18 +26,6 @@ CREATE TABLE orders
     sm_id              smallint    not null,
     date_created       timestamp   not null,
     oof_shard           varchar(255)     not null
-);
-
-CREATE TABLE deliveries
-(
-    id      serial PRIMARY KEY,
-    name     varchar(255) not null,
-    phone    varchar(255) not null,
-    zip      varchar(255) not null,
-    city     varchar(255) not null,
-    address  varchar(255) not null,
-    region   varchar(255) not null,
-    email    varchar(255) not null
 );
 
 CREATE TABLE payments
