@@ -9,6 +9,7 @@ const (
 	INSERT_DELIVERIES = "insert into deliveries (name, phone, zip, city, address, region, email) values ($1, $2, $3, $4, $5, $6, $7) returning id;"
 	INSERT_PAYMENT    = "insert into payments values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) returning transaction;"
 	INSERT_ITEM       = "insert into items values ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11) returning track_number;"
+	SELECT_ORDER_ID   = "select * from orders where order_uid = $1;"
 )
 
 type OrderRepository struct {
@@ -16,6 +17,10 @@ type OrderRepository struct {
 }
 
 func (r *OrderRepository) Create(order *model.Order) (*model.Order, error) {
+	if err := order.Validate(); err != nil {
+		return nil, err
+	}
+
 	var deliveryId int
 	if err := r.store.db.QueryRow(INSERT_DELIVERIES,
 		order.Delivery.Name,
@@ -83,5 +88,24 @@ func (r *OrderRepository) Create(order *model.Order) (*model.Order, error) {
 }
 
 func (r *OrderRepository) FindOrderId(id string) (*model.Order, error) {
-	return nil, nil
+	order := &model.Order{}
+	if err := r.store.db.QueryRow(SELECT_ORDER_ID,
+		id,
+	).Scan(
+		&order.OrderId,
+		&order.TrackNumber,
+		&order.Entry,
+		&order.Locale,
+		&order.Delivery.Id,
+		&order.Signature,
+		&order.Customer,
+		&order.DeliveryService,
+		&order.Shardkey,
+		&order.SmId,
+		&order.DateOf,
+		&order.OofShard,
+	); err != nil {
+		return nil, err
+	}
+	return order, nil
 }
