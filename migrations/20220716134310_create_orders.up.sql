@@ -1,5 +1,4 @@
-CREATE TABLE deliveries
-(
+create table deliveries (
     id      serial PRIMARY KEY,
     name     varchar(255) not null,
     phone    varchar(255) not null,
@@ -12,8 +11,7 @@ CREATE TABLE deliveries
 
 
 
-CREATE TABLE orders
-(
+create table orders (
     order_uid           varchar(255) PRIMARY KEY,
     track_number        varchar(255)     not null UNIQUE,
     entry               varchar(255) not null,
@@ -23,13 +21,12 @@ CREATE TABLE orders
     customer_id         varchar(255)     not null,
     delivery_service    varchar(255)     not null,
     shardkey            varchar(255)     not null,
-    sm_id              smallint    not null,
+    sm_id              int    not null,
     date_created       timestamp   not null,
     oof_shard           varchar(255)     not null
 );
 
-CREATE TABLE payments
-(
+create table payments (
     transaction    varchar(255) PRIMARY KEY REFERENCES orders (order_uid),
     request_id     varchar(255) not null,
     currency       varchar(255) not null,
@@ -42,8 +39,7 @@ CREATE TABLE payments
     custom_fee    int     not null
 );
 
-CREATE TABLE items
-(
+create table items (
     rid           varchar(255) PRIMARY KEY,
     chrt_id      int     not null,
     track_number  varchar(255) not null REFERENCES orders (track_number),

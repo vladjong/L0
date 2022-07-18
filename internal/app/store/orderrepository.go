@@ -1,10 +1,9 @@
-package sqlstore
+package store
 
 import (
-	"database/sql"
+	"log"
 
 	"github.com/vladjong/L0/internal/app/model"
-	"github.com/vladjong/L0/internal/app/store"
 )
 
 const (
@@ -19,11 +18,10 @@ type OrderRepository struct {
 	store *Store
 }
 
-func (r *OrderRepository) Create(order *model.Order) error {
+func (r *OrderRepository) Create(order *model.Order) (*model.Order, error) {
 	if err := order.Validate(); err != nil {
-		return err
+		return nil, err
 	}
-
 	var deliveryId int
 	if err := r.store.db.QueryRow(INSERT_DELIVERIES,
 		order.Delivery.Name,
@@ -34,9 +32,9 @@ func (r *OrderRepository) Create(order *model.Order) error {
 		order.Delivery.Region,
 		order.Delivery.Email,
 	).Scan(&deliveryId); err != nil {
-		return err
+		return nil, err
 	}
-
+	log.Println(order.Locale)
 	if err := r.store.db.QueryRow(INSERT_ORDER,
 		order.OrderId,
 		order.TrackNumber,
@@ -51,7 +49,7 @@ func (r *OrderRepository) Create(order *model.Order) error {
 		order.DateOf,
 		order.OofShard,
 	).Scan(&order.OrderId, &order.TrackNumber); err != nil {
-		return err
+		return nil, err
 	}
 
 	if err := r.store.db.QueryRow(INSERT_PAYMENT,
@@ -66,7 +64,7 @@ func (r *OrderRepository) Create(order *model.Order) error {
 		order.Payment.GoodsTotal,
 		order.Payment.CustomFee,
 	).Scan(&order.Payment.Transaction); err != nil {
-		return err
+		return nil, err
 	}
 
 	for _, item := range order.Items {
@@ -83,10 +81,11 @@ func (r *OrderRepository) Create(order *model.Order) error {
 			item.Brand,
 			item.Status,
 		).Scan(&item.TrackNumber); err != nil {
-			return err
+			return nil, err
 		}
 	}
-	return nil
+
+	return order, nil
 }
 
 func (r *OrderRepository) FindOrderId(id string) (*model.Order, error) {
@@ -107,9 +106,6 @@ func (r *OrderRepository) FindOrderId(id string) (*model.Order, error) {
 		&order.DateOf,
 		&order.OofShard,
 	); err != nil {
-		if err == sql.ErrNoRows {
-			return nil, store.ErrRecordNotFound
-		}
 		return nil, err
 	}
 	return order, nil
