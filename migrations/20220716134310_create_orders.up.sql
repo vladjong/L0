@@ -1,5 +1,5 @@
 create table deliveries (
-    id      serial PRIMARY KEY,
+    id      serial primary key,
     name     varchar(255) not null,
     phone    varchar(255) not null,
     zip      varchar(255) not null,
@@ -12,11 +12,11 @@ create table deliveries (
 
 
 create table orders (
-    order_uid           varchar(255) PRIMARY KEY,
-    track_number        varchar(255)     not null UNIQUE,
+    order_uid           varchar(255) primary key,
+    track_number        varchar(255)     not null unique,
     entry               varchar(255) not null,
     locale              varchar(255) not null,
-    delivery_id        int         not null REFERENCES deliveries (id),
+    delivery_id        int         not null references deliveries (id),
     internal_signature  varchar(255)     not null,
     customer_id         varchar(255)     not null,
     delivery_service    varchar(255)     not null,
@@ -27,7 +27,7 @@ create table orders (
 );
 
 create table payments (
-    transaction    varchar(255) PRIMARY KEY REFERENCES orders (order_uid),
+    transaction    varchar(255) primary key references orders (order_uid),
     request_id     varchar(255) not null,
     currency       varchar(255) not null,
     provider       varchar(255) not null,
@@ -40,9 +40,9 @@ create table payments (
 );
 
 create table items (
-    rid           varchar(255) PRIMARY KEY,
+    rid           varchar(255) primary key,
     chrt_id      int     not null,
-    track_number  varchar(255) not null REFERENCES orders (track_number),
+    track_number  varchar(255) not null references orders (track_number),
     price        int     not null,
     name          varchar(255) not null,
     sale         int     not null,

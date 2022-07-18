@@ -35,6 +35,7 @@ func (r *OrderRepository) Create(order *model.Order) (*model.Order, error) {
 		return nil, err
 	}
 	log.Println(order.Locale)
+
 	if err := r.store.db.QueryRow(INSERT_ORDER,
 		order.OrderId,
 		order.TrackNumber,
