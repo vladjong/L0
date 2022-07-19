@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/sirupsen/logrus"
+	"github.com/vladjong/L0/internal/app/cache"
 	"github.com/vladjong/L0/internal/app/store"
 )
 
@@ -14,13 +15,15 @@ type Server struct {
 	logger *logrus.Logger
 	router *mux.Router
 	store  *store.Store
+	cache  *cache.Cache
 }
 
-func New(config *Config) *Server {
+func New(config *Config, cache *cache.Cache) *Server {
 	return &Server{
 		config: config,
 		logger: logrus.New(),
 		router: mux.NewRouter(),
+		cache:  cache,
 	}
 }
 
@@ -46,7 +49,10 @@ func (s *Server) configureLogger() error {
 }
 
 func (s *Server) configureRouter() {
-	s.router.HandleFunc("/", s.handleHello())
+	s.router.PathPrefix("/templates/").Handler(http.StripPrefix("/templates/", http.FileServer(http.Dir("./templates"))))
+	s.router.HandleFunc("/", s.handleMainPage())
+	s.router.HandleFunc("/order", s.handleOrderPage())
+	http.Handle("/", s.router)
 }
 
 func (s *Server) configureStore() error {
@@ -58,9 +64,23 @@ func (s *Server) configureStore() error {
 	return nil
 }
 
-func (s *Server) handleHello() http.HandlerFunc {
+func (s *Server) handleMainPage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		tmpl, _ := template.ParseFiles("templates/html/page.html")
+		tmpl := template.Must(template.ParseFiles("templates/html/search.html"))
 		tmpl.Execute(w, nil)
+	}
+}
+
+func (s *Server) handleOrderPage() http.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request) {
+		orderUid := r.FormValue("order_id")
+		order, err := s.store.Order().FindOrderId(orderUid)
+		if err != nil {
+			tmpl := template.Must(template.ParseFiles("templates/html/error.html"))
+			tmpl.Execute(w, nil)
+		} else {
+			tmpl := template.Must(template.ParseFiles("templates/html/order.html"))
+			tmpl.Execute(w, order)
+		}
 	}
 }

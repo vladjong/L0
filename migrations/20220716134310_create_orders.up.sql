@@ -9,8 +9,6 @@ create table deliveries (
     email    varchar(255) not null
 );
 
-
-
 create table orders (
     order_uid           varchar(255) primary key,
     track_number        varchar(255)     not null unique,

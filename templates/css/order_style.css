@@ -1,0 +1,93 @@
+@import url('https://fonts.googleapis.com/css?family=Comfortaa');
+*
+{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Comforta', sans-serif;
+}
+body
+{
+    min-height: 100vh;
+    background: #BC3D96;
+}
+.main-box
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-radius: 10px;
+}
+.orders
+{
+    display: flex;
+}
+.btn
+{
+    background-color: white;
+    border: none;
+    color: #BC3D96;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 20px;
+    font-size: 20px;
+    font-weight: 500;
+    border-radius: 10px;
+}
+.btn:hover {
+    background-color: whitesmoke; /* Green */
+}
+.box
+{
+    align-items: center;
+    width: 350px;
+    border-bottom: 20px solid #2f3640;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+
+}
+.box h2
+{
+    color: #BC3D96;
+    background-color: white;
+    padding: 10px 20px;
+    font-size: 20px;
+    font-weight: 700;
+}
+.box ul
+{
+    position: relative;
+    background: white;
+}
+.box ul li
+{
+    list-style: none;
+    padding: 10px;
+    width: 100%;
+    box-shadow: 0 5px 25px rgba(0,0,0,0,.1);
+    transition: transform 0.5s;
+}
+.box ul:hover li
+{
+    opacity: 0.2;
+}
+.box ul li:hover
+{
+    transform: scale(1.1);
+    z-index: 100;
+    background: white;
+    box-shadow: 0 5px 25px rgba(0,0,0,.2);
+    color: #BC3D96;;
+    opacity: 1;
+}
+.label
+{
+    position:absolute; 
+    width:100%; 
+    top:40%; 
+    text-align:  center;
+    font-size: 120px;
+    color: white;
+}

@@ -20,31 +20,31 @@ func init() {
 }
 
 func main() {
-	cache := cache.New(5*time.Minute, 10*time.Minute)
 	flag.Parse()
+
+	log.Println("Inits cash")
+	cache := cache.New(5*time.Minute, 10*time.Minute)
+	log.Println("Init server")
 	config := server.NewConfig()
-	// Initialize Server subscriber
 	_, err := toml.DecodeFile(configPath, config)
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// Initialize Nats subscriber
-	nsc := nats.NewConfig()
-	_, err = toml.DecodeFile(configPath, nsc)
+	log.Println("Init nats")
+	configNats := nats.NewConfig()
+	_, err = toml.DecodeFile(configPath, configNats)
 	if err != nil {
 		log.Fatal(err)
 	}
-	ns := nats.New(nsc, cache)
+	ns := nats.New(configNats, cache)
 	log.Println("Starting nats")
 	go func() {
 		if err := ns.Start(); err != nil {
 			log.Fatal(err)
 		}
 	}()
-
-	log.Println("Starting web server")
-	s := server.New(config)
+	log.Println("Starting server")
+	s := server.New(config, cache)
 	if err := s.Start(); err != nil {
 		log.Fatal(err)
 	}

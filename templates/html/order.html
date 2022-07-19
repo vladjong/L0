@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Order information</title>
+    <link rel='stylesheet' href='/templates/css/order_style.css'>
+</head>
+<body>
+    <div class="main-box">
+        <div class="orders">
+    <div class="box">
+        <h2>Order</h2>
+        <ul>
+            <li>Order id: {{.OrderId}}</li>
+            <li>Track number: {{.TrackNumber}}</li>
+            <li>Locale: {{.Locale}}</li>
+            <li>Internal signature: {{.Signature}}</li>
+            <li>Customer id: {{.Customer}}</li>
+            <li>Delivery service: {{.DeliveryService}}</li>
+            <li>Shard key: {{.Shardkey}}</li>
+            <li>Sm id: {{.SmId}}</li>
+            <li>Date created: {{.DateOf}}</li>
+            <li>Oof shard: {{.OofShard}}</li>
+        </ul>
+    </div>
+    <div class="box">
+        <h2>Deliverie</h2>
+        <ul>
+            <li>Id: {{.Delivery.Id}}</li>
+            <li>Name: {{.Delivery.Name}}</li>
+            <li>Phone: {{.Delivery.Phone}}</li>
+            <li>Zip: {{.Delivery.Zip}}</li>
+            <li>City: {{.Delivery.City}}</li>
+            <li>Address dt: {{.Delivery.Address}}</li>
+            <li>Region: {{.Delivery.Region}}</li>
+            <li>Email: {{.Delivery.Email}}</li>
+        </ul>
+    </div>
+    <div class="box">
+        <h2>Payment</h2>
+        <ul>
+            <li>Order id: {{.Payment.Transaction}}</li>
+            <li>Request id: {{.Payment.RequestId}}</li>
+            <li>Currency: {{.Payment.Currency}}</li>
+            <li>Provider: {{.Payment.Provider}}</li>
+            <li>Amount: {{.Payment.Amount}}</li>
+            <li>Payment dt: {{.Payment.PaymentDt}}</li>
+            <li>Bank: {{.Payment.Bank}}</li>
+            <li>Delivery cost: {{.Payment.DeliveryCost}}</li>
+            <li>Goods total: {{.Payment.GoodsTotal}}</li>
+            <li>Custom fee: {{.Payment.CustomFee}}</li>
+        </ul>
+    </div>
+    <div class="box">
+        <h2>Item</h2>
+        {{ range .Items }}
+        <ul>
+            <li>Chrt id: {{.ChrtId}}</li>
+            <li>Track number: {{.TrackNumber}}</li>
+            <li>Price: {{.Price}}</li>
+            <li>Rid id: {{.Rid}}</li>
+            <li>Name: {{.Name}}</li>
+            <li>Sale: {{.Sale}}</li>
+            <li>Size: {{.Size}}</li>
+            <li>Total price: {{.TotalPrice}}</li>
+            <li>Nm id: {{.NmId}}</li>
+            <li>Brand: {{.Brand}}</li>
+            <li>Status: {{.Status}}</li>
+        </ul>
+        {{end}}
+    </div> -->
+</div>
+    <div>
+        <a href="/" role="button" class="btn">Back</a>
+    </div>
+</div>
+</body>
+</html>
