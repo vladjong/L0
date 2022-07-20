@@ -2,6 +2,7 @@ package server
 
 import (
 	"html/template"
+	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
@@ -35,6 +36,9 @@ func (s *Server) Start() error {
 	if err := s.configureStore(); err != nil {
 		return err
 	}
+	if err := s.configureCache(); err != nil {
+		return err
+	}
 	s.logger.Info("starting server")
 	return http.ListenAndServe(s.config.BindAddr, s.router)
 }
@@ -64,6 +68,18 @@ func (s *Server) configureStore() error {
 	return nil
 }
 
+func (s *Server) configureCache() error {
+	tmp, err := s.store.Order().SelectAll()
+	if err != nil {
+		return err
+	}
+	for i := 0; i < len(tmp); i++ {
+		s.cache.Set(tmp[i].OrderId, tmp[i])
+	}
+	log.Println("Number of arguments in the cache: ", s.cache.Len())
+	return nil
+}
+
 func (s *Server) handleMainPage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		tmpl := template.Must(template.ParseFiles("templates/html/search.html"))
@@ -74,13 +90,13 @@ func (s *Server) handleMainPage() http.HandlerFunc {
 func (s *Server) handleOrderPage() http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		orderUid := r.FormValue("order_id")
-		order, err := s.store.Order().FindOrderId(orderUid)
-		if err != nil {
+		tmp, err := s.cache.Get(orderUid)
+		if !err {
 			tmpl := template.Must(template.ParseFiles("templates/html/error.html"))
 			tmpl.Execute(w, nil)
 		} else {
 			tmpl := template.Must(template.ParseFiles("templates/html/order.html"))
-			tmpl.Execute(w, order)
+			tmpl.Execute(w, tmp)
 		}
 	}
 }

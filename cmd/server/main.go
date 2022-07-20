@@ -3,7 +3,6 @@ package main
 import (
 	"flag"
 	"log"
-	"time"
 
 	"github.com/BurntSushi/toml"
 	"github.com/vladjong/L0/internal/app/cache"
@@ -21,9 +20,8 @@ func init() {
 
 func main() {
 	flag.Parse()
-
 	log.Println("Inits cash")
-	cache := cache.New(5*time.Minute, 10*time.Minute)
+	cache := cache.New()
 	log.Println("Init server")
 	config := server.NewConfig()
 	_, err := toml.DecodeFile(configPath, config)

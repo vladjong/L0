@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"sync"
-	"time"
 
 	"github.com/nats-io/stan.go"
 	"github.com/vladjong/L0/internal/app/cache"
@@ -62,7 +61,6 @@ func Block() {
 }
 
 func save(cache *cache.Cache, store *store.Store, m []byte) error {
-	log.Println("Saving nats message")
 	target := model.Order{}
 	err := json.Unmarshal(m, &target)
 	if err != nil {
@@ -74,6 +72,7 @@ func save(cache *cache.Cache, store *store.Store, m []byte) error {
 	if err != nil {
 		return err
 	}
-	cache.Set(target.OrderId, target, 5*time.Minute)
+	log.Println("Saving message in cache")
+	cache.Set(target.OrderId, target)
 	return nil
 }

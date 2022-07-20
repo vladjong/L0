@@ -32,27 +32,29 @@ func main() {
 		log.Fatal(err)
 	}
 	defer sc.Close()
-	log.Println("Enter the number of model additions:")
+	log.Println("Enter the number of model additions: ")
 	var countAgr int = 1
+	var error bool = true
 	fmt.Fscan(os.Stdin, &countAgr)
+	log.Println("Generate an erroneous case?")
+	fmt.Fscan(os.Stdin, &error)
 	log.Println("Publishing start")
 	for i := 0; i < countAgr; i++ {
 		o := model.TestOrder(&testing.T{})
 		if i > 0 {
 			createUniqueModel(o, i)
 		}
+		if error {
+			o.Locale = "russian"
+		}
 		out, err := json.MarshalIndent(o, "", "")
 		if err != nil {
 			log.Println(err)
-			os.Exit(1)
 		}
 		err = sc.Publish("test", out)
 		if err != nil {
 			log.Println(err)
 		}
-		fmt.Println(string(out))
-		log.Println("Done")
-
 	}
-	log.Println("Publisher is done")
+	log.Println("Publishing end")
 }
