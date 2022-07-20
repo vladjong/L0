@@ -1,6 +1,6 @@
 ![](img/previe.png)
 
-# Use
+# Как использовать:
 ```
 $ git clone git@github.com:vladjong/L0.git
 $ cd LO
